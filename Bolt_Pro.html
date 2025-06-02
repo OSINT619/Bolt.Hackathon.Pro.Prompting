@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Control Your Build</title>
+<meta name="viewport" content="width=device-width, initial-scale=990, maximum-scale=0, user-scalable=relative">
+  <style>
+    :root {
+      --grey: #e6eaf1;
+      --card-bg: #fff;
+      --card-radius: 18px;
+      --card-shadow: 0 4px 24px #c3c8d133, 0 2px 8px #c3c8d122;
+      --section-padding: 2.5rem 0 2.5rem 0;
+    }
+    html, body {
+      width: 100%;
+      height: 100%;
+    }
+body {
+  background: var(--grey);
+  color: #222;
+  font-family: neue-haas-grotesk, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+  overflow-y: auto; /* Allow vertical scrolling */
+}
+}
+    .main-wrapper {
+      min-height: 100vh;
+      display: flex-direction;
+      flex-direction: column;
+      align-items: center;
+      justify-content: auto;
+      padding-bottom: 3em;
+    }
+    .hero-ball {
+      width: 900%;
+      max-width: 900px;
+      margin: 18vh auto 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      position: relative;
+    }
+.stage {
+  position: absolute;
+  top: 170%;
+  left: 35%;
+  transform: translate(-70%, 0%);
+  width: 100%;
+  min-width: 416px;
+  max-width: 416px; /* Ensure this line is correct */
+  height: 400px;
+  background-color: var(--grey);
+  visibility: visible;
+  overflow: visible;
+  cursor: pointer;
+  margin-bottom: 0;
+  border-radius: 24px 24px 0 0;
+  box-shadow: 0 8px 24px #c3c8d133, 0 2px 8px #fff8, 0 1.5px 6px #c3c8d122;
+}
+    svg {
+      position: absolute;
+      width: 1016px;
+      height: 600px;
+    }
+    .dark-patch {
+      visibility: hidden;
+    }
+    .ball {
+      visibility: visible;
+      opacity: 1;
+    }
+    h1.band {
+      position: absolute;
+      bottom: 40px;
+      left: 18px;
+      font-size: 44px;
+      margin: 0;
+      letter-spacing: -4px;
+      overflow: hidden;
+      white-space: normal; /* Allow text to wrap normally */
+      word-break: break-word; /* Break words to prevent splitting */
+      overflow-wrap: break-word; /* Ensure words wrap correctly */
+      font-weight: 950;
+      font-style: nowrap;
+      line-height: 0.9;
+      color: #bfc3c9;
+      text-shadow: 0 2px 8px #fff, 0 1.5px 6px #c3c8d122;
+      z-index: 2;
+    }
+    .nclc-neumorph-container {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 1.5em 2em 1.5em;
+      background: var(--grey);
+      border-radius: 0 0 24px 24px;
+      box-shadow:
+        10px 10px 28px #c3c8d1,
+        -10px -10px 28px #ffffff,
+        0 2px 8px #c3c8d133 inset,
+        0 -2px 8px #ffffff88 inset;
+    }
+    .nclc-neumorph-section {
+      padding: 0;
+      margin-bottom: 2.5em;
+    }
+    .nclc-neumorph-section > h2,
+    .nclc-neumorph-container > h1,
+    .neumorph-title {
+      background: #f5f7fa;
+      color: #222;
+      font-size: 5.0rem;
+      
+      font-weight: 900;
+      border-radius: 18px;
+      box-shadow:
+        0 4px 16px #c3c8d133,
+        0 2px 8px #fff8,
+        0 1.5px 6px #c3c8d122;
+      padding: 1.7em 1.2em;
+      margin: 2rem 0 2rem 0;
+      text-align: center;
+      letter-spacing: 0.02em;
+      border: 1px solid #e0e4ea;
+    }
+
+    .nclc-neumorph-container > h1 {
+      font-size: 1.6rem;
+      margin-top: 0;
+      margin-bottom: 2rem;
+      background: #f5f7fa;
+      color: #222;
+      font-weight: 900;
+      border-radius: 24px;
+      box-shadow:
+        0 4px 16px #c3c8d133,
+        0 2px 8px #fff8,
+        0 1.5px 6px #c3c8d122;
+      padding: 1.2em 1.2em 1.2em 1.2em;
+      text-align: center;
+      border: 2px solid #e0e4ea;
+    }
+    .nclc-card, .highlight-box, .technique-card {
+      background: var(--card-bg);
+      border-radius: var(--card-radius);
+      box-shadow: var(--card-shadow);
+      padding: 1.3em 1.5em;
+      margin: 1.2em 0;
+    }
+    .nclc-card h3,
+    .technique-card h3 {
+      margin-top: 0;
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+    .nclc-card ol, .nclc-card ul,
+    .technique-card ul, .highlight-box ul {
+      margin: 0.5em 0 0.5em 1.2em;
+      padding: 0;
+    }
+    .highlight-box {
+      background: #f6faff;
+      border-left: 3px solid #b3d4fc;
+    }
+    .parallax-text > p,
+    .parallax-text > ul,
+    .parallax-text > ol {
+      margin: 1em 0;
+    }
+    ul[style*="columns"] {
+      column-gap: 2em;
+      margin: 1.5em 0;
+    }
+    h1, h2, .neumorph-text {
+      background: none !important;
+      color: #e3e6ee;
+      font-weight: 1900;
+      letter-spacing: 0.03em;
+      text-align: center;
+      border: none !important;
+      box-shadow: none !important;
+      padding: inherit;
+      margin-top: 2.2rem;
+      margin-bottom: 1.7rem;
+      text-shadow:
+        2px 2px 8px #bfc3c9,
+        -2px -2px 8px #fff,
+        0 2px 12px #c3c8d155;
+    }
+
+    /* Strong, dark color for card/section subtitles */
+    h3, h4, h5, h6 {
+      background: none !important;
+      color: #222 !important;
+      font-weight: 900;
+      letter-spacing: 0.02em;
+      text-align: left;
+      border: none !important;
+      box-shadow: none !important;
+      padding: inherit;
+      margin-top: 1.2rem;
+      margin-bottom: 0.7rem;
+      text-shadow: none;
+    }
+
+    /* Larger, more readable font sizes for headers */
+    h1 { font-size: 1.8rem; }
+    h2 { font-size: 2.1rem; }
+    h3 { font-size: 1.5rem; }
+    h4 { font-size: 1.2rem; }
+    h5, h6 { font-size: 1rem; }
+    @media (max-width: 900px) {
+      .stage, svg {
+        min-width: 100vw;
+        width: 100vw;
+        max-width: 100vw;
+      }
+      .hero-ball {
+        max-width: 100vw;
+      }
+      .nclc-neumorph-container {
+        max-width: 100vw;
+        padding: 0 0.5em 2em 0.5em;
+      }
+    }
+    @media (max-width: 700px) {
+      .stage, svg {
+        height: 220px;
+        min-width: 100vw;
+        width: 100vw;
+        max-width: 100vw;
+      }
+      h1.band {
+        font-size: 2rem;
+        left: 10px;
+        bottom: 18px;
+      }
+      .nclc-neumorph-section > h2 {
+        font-size: 2.0rem;
+        padding: 0.6em 0.5em;
+      }
+      .nclc-card, .highlight-box, .technique-card {
+        padding: 1em 0.7em;
+      }
+    }
+    .slide-section {
+      opacity: 0;
+      transform: translateX(0);
+      will-change: opacity, transform;
+      transition: opacity 0.3s, transform 0.3s;
+    }
+  </style>
+  <!-- GSAP and plugins for animation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://assets.codepen.io/16327/SplitText3.min.js"></script>
+  <script src="https://assets.codepen.io/16327/CustomEase3.min.js"></script>
+  <script src="https://assets.codepen.io/16327/CustomBounce3.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+</head>
+<body>
+<div class="main-wrapper">
+
+  <!-- Animated Ball Header -->
+  <div class="hero-ball">
+    <div class="stage">
+      <svg class="svg" viewBox="0 0 716 1008" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="ballShade" cx="60%" cy="40%" r="70%">
+            <stop offset="0%" stop-color="#fff" stop-opacity="0.95"/>
+            <stop offset="60%" stop-color="#e0e0e0" stop-opacity="0.7"/>
+            <stop offset="100%" stop-color="#b0b0b0" stop-opacity="0.8"/>
+          </radialGradient>
+          <filter id="ballShadow" x="-40%" y="-40%" width="180%" height="180%">
+            <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#888" flood-opacity="0.35"/>
+          </filter>
+          <filter id="squareShadow" x="-10%" y="-10%" width="120%" height="120%">
+            <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#bbb" flood-opacity="0.25"/>
+          </filter>
+          <linearGradient id="squareShade" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#f9f9f9" />
+            <stop offset="100%" stop-color="#e0e0e0" />
+          </linearGradient>
+        </defs>
+        <rect class="dark-patch" width="100" height="150" x="616" fill="#f7f7f7" />
+        <g class="square-frame">
+          <g class="square">
+            <rect class="square__large" width="868" height="868" fill="url(#squareShade)" filter="url(#squareShadow)" />
+            <rect class="square__small" x="303" y="303" width="262" height="262" fill="#e6eaf1" />
+            <circle class="ball" cx="405" cy="463" r="103" fill="url(#ballShade)" filter="url(#ballShadow)" />
+          </g>
+        </g>
+      </svg>
+      <h1 class="band">Bolt.Pro</h1>
+    </div>
+  </div>
+
+  <!-- Main Content Container -->
+  <div class="nclc-neumorph-container">
+
+    <h1>Control Your No Code Build</h1>
+
+    <section class="nclc-neumorph-section">
+        <h2 style="color: #000000ad;"
+        >Prompt 
+        </p>
+        Sectioning</h2>
+        <div class="parallax-text">
+          <p>
+            <strong>Breaking your prompt into clear, focused sections isn't just helpful—it's essential. Here's why:</strong>
+          </p>
+          
+          <div class="nclc-card">
+            <h3>1. Token Limits</h3>
+            <p>Tools like Bolt have strict token caps (typically between 4k–32k). Feeding the model smaller, more targeted sections prevents cutoff issues and ensures your full input is processed.</p>
+          </div>
+    
+          <div class="nclc-card">
+            <h3>2. Increased Accuracy</h3>
+            <p>Isolated sections keep the AI focused, reducing confusion and improving precision in output. One section at a time means clearer intent and better results.</p>
+          </div>
+    
+          <div class="nclc-card">
+            <h3>3. Faster Debugging & Iteration</h3>
+            <p>When something breaks, it's way easier to pinpoint the problem in a single section than wade through a monolithic prompt.</p>
+          </div>
+    
+          <div class="nclc-card">
+            <h3>4. Tokens Go Fast</h3>
+            <p>Complex projects = more tokens = more credits. Don't waste money OR free credits. Structure your prompts to get high-quality results efficiently. (This approach has helped me create many sucessful business models.)</p>
+          </div>
+    
+          <div class="nclc-card">
+            <h3>5. Don't Skip the Research</h3>
+            <p>Know your performance requirements, data structures, compliance needs, storage solutions, etc. If you don't, ask the AI. Compare with similar apps. Learn before you build. Laziness here will cost you later.</p>
+          </div>
+    
+          <div class="highlight-box">
+            <h4>To Keep Things Running Smoothly:</h4>
+            <ul>
+              <li>Briefly reference earlier sections (e.g., "see Section 0 for context…").</li>
+              <li>Store reusable elements (like branding guidelines or roles) in a shared doc or Bolt's .bolt/prompt memory.</li>
+              <li>Ignore the hype—"1 sentence = full app" sounds great, but it leads to shallow results. You're aiming for quality.</li>
+            </ul>
+            <p>If you want to increase the quality of your applications, consider using my structured prompt system. It's what I use multiple times a day and Ive managed to sell a handfull of the apps!</p>
+          </div>
+        </div>
+    </section>
+    
+    <section class="nclc-neumorph-section">
+        <h2 style="color: #f9f9f9ad;">Prompting: <p> Get The </p> Answers <p> You Want</p></h2>
+        <div class="parallax-text">
+          <p><strong>Choose the method that matches your task. Don't be afraid to mix and match.</strong></p>
+          
+          <div class="technique-card">
+            <h3>1. Zero-Shot Prompting</h3>
+            <p><strong>Definition:</strong> Ask the model a question with no examples.</p>
+            <p><strong>Example:</strong> "Translate 'The weather is nice today' into French."</p>
+            <p><strong>Best For:</strong> Quick tasks with clear objectives.</p>
+          </div>
+    
+          <div class="technique-card">
+            <h3>2. Few-Shot Prompting</h3>
+            <p><strong>Definition:</strong> Provide a few examples to guide the model.</p>
+            <p><strong>Example:</strong><br>
+            "Translate:<br><br>
+            1. 'Hello' → 'Bonjour'<br><br>
+            2. 'I love books' → 'J'aime les livres'<br><br>
+            3. 'The weather is nice today' →"</p>
+            <p><strong>Best For:</strong> Pattern recognition and consistent formatting.</p>
+          </div>
+    
+          <div class="technique-card">
+            <h3>3. Chain-of-Thought Prompting (CoT)</h3>
+            <p><strong>Definition:</strong> Prompt the model to reason step-by-step.</p>
+            <p><strong>Example:</strong> "John has 3 apples, buys 2, gives 1 away. How many left? Let's think step by step."</p>
+            <p><strong>Best For:</strong> Logic, math, and reasoning.</p>
+          </div>
+    
+          <div class="technique-card">
+            <h3>4. Meta Prompting</h3>
+            <p><strong>Definition:</strong> Ask the model to create a prompt.</p>
+            <p><strong>Example:</strong> "Write a prompt to summarize a scientific article for a 10-year-old."</p>
+            <p><strong>Best For:</strong> Prompt engineering and AI-assisted instructions.</p>
+          </div>
+    
+          <div class="technique-card">
+            <h3>5. Self-Consistency Decoding</h3>
+            <p><strong>Definition:</strong> Generate multiple answers, then select the most consistent one.</p>
+            <p><strong>Example:</strong> "A train travels 60 miles in 1.5 hours. What's its average speed? Think step-by-step."</p>
+            <p><strong>Best For:</strong> Tasks requiring high accuracy and logical validation.</p>
+          </div>
+    
+          <div class="technique-card">
+            <h3>6. Generate Knowledge Prompting</h3>
+            <p><strong>Definition:</strong> Ask the AI to recall relevant facts before answering.</p>
+            <p><strong>Example:</strong> "List facts before answering: Why do birds fly south for winter?"</p>
+            <p><strong>Best For:</strong> Research-heavy or knowledge-based tasks.</p>
+          </div>
+    
+          <div class="technique-card">
+            <h3>7. Prompt Chaining</h3>
+            <p><strong>Definition:</strong> Use output from one prompt as input to another.</p>
+            <p><strong>Example:</strong><br>
+            Prompt 1: "Summarize this article."<br><br>
+            Prompt 2: "Generate questions based on the summary."</p>
+            <p><strong>Best For:</strong> Multi-step workflows like writing or planning.</p>
+          </div>
+    
+          <div class="technique-card">
+            <h3>8. Tree of Thoughts (ToT)</h3>
+            <p><strong>Definition:</strong> Explore multiple reasoning paths like a decision tree.</p>
+            <p><strong>Example:</strong> "You're solving a puzzle. At each step, consider all options and show your reasoning tree."</p>
+            <p><strong>Best For:</strong> Strategic thinking and planning.</p>
+          </div>
+    
+          <div class="technique-card">
+            <h3>9. Retrieval Augmented Generation (RAG)</h3>
+            <p><strong>Definition:</strong> Pull in relevant external data before generating a response.</p>
+            <p><strong>Example:</strong> "Based on these documents, what are aspirin's side effects?"</p>
+            <p><strong>Best For:</strong> Factual accuracy and document-based Q&A.</p>
+          </div>
+    
+          <div class="technique-card">
+            <h3>10. Directional Stimulus Prompting</h3>
+            <p><strong>Definition:</strong> Guide output using tone or emotional cues.</p>
+            <p><strong>Example:</strong> "Write a poem about the ocean with a mysterious, awe-inspiring tone."</p>
+            <p><strong>Best For:</strong> Creative writing, marketing, emotional tone control.</p>
+          </div>
+    
+          <div class="technique-card">
+            <h3>11. Graph Prompting</h3>
+            <p><strong>Definition:</strong> Use structured data (like a graph) as input.</p>
+            <p><strong>Example:</strong> "Given this ecosystem graph, explain the energy flow."</p>
+            <p><strong>Best For:</strong> Technical tasks involving relationships or data structures.</p>
+          </div>
+    
+          <div class="technique-card">
+            <h3>12. ReAct Prompting (Reasoning + Acting)</h3>
+            <p><strong>Definition:</strong> Combines reasoning steps (thoughts) with actions (like API calls or searches), allowing the model to think, act, observe, and repeat.</p>
+            <p><strong>Example:</strong><br>
+            "You're an assistant solving a question.<br>
+            Thought: I should look up the definition of 'entropy'.<br>
+            Action: Search('define entropy')<br>
+            Observation: Entropy is the measure of disorder in a system.<br>
+            Answer: Entropy is a measure of disorder…"</p>
+            <p><strong>Best For:</strong> Tool-augmented AI agents, research workflows, or systems that combine logic and tool use in a looped reasoning process.</p>
+          </div>
+        </div>
+    </section>
+    
+    <section class="nclc-neumorph-section">
+        <h2 style="color: #f9f9f9ad;">Midway Thoughts</h2>
+        <div class="parallax-text">
+          <p>Thanks for pushing through this guide. You're almost there. Don't give up.:</p>
+          <ul>
+            <li><strong>Remember: Be specific.</strong> If you're vague, the AI will fill in gaps—and you might not like how.</li>
+            <li><strong>Use structure.</strong> Work in chunks. Keep things clean and modular.</li>
+            <li><strong>Put in the work.</strong> The more you guide the AI, the more it gives back.</li>
+          </ul>
+          <p>This is your project. Drive the process, and you'll build something that actually lasts.</p>
+          <p>Enjoy—and good luck!</p>
+        </div>
+    </section>
+    
+    <section class="nclc-neumorph-section">
+        <h2 style="color: #f9f9f9ad;">How to: Template</h2>
+        <div class="parallax-text">
+          <ul>
+            <li>Fill out the <strong>SECTION 0: PROJECT OVERVIEW &amp; FOUNDATION</strong> first to provide Bolt with the big picture</li>
+            <li>For each development phase, copy the relevant phase section (e.g., "SECTION 1: PHASE 1"), fill in your specific details, and send it to Bolt as a distinct prompt</li>
+            <li>Be as specific and clear as possible. Remember, Bolt works best with focused, detailed instructions</li>
+            <li>Refer back to your answers in Section 0 as you detail subsequent phases</li>
+          </ul>
+        </div>
+    </section>
+    
+    <section class="nclc-neumorph-section">
+        <h2 style="color: #f9f9f9ad;">SECTION 0: <p> PROJECT </p> <p> OVERVIEW </p> &amp; FOUNDATION </h2>
+        <div class="nclc-card">
+            <ol>
+                <li><strong>Project Title/Concept:</strong> <em>[e.g., "Comprehensive Quiz Platform", "E-commerce site for handmade jewelry", "Internal Task Management System"]</em></li>
+                <li><strong>Purpose &amp; Business Context:</strong>
+                    <ul>
+                        <li>Why are you building this? <em>[Explain the main goal, the problem it solves, or the opportunity it addresses. e.g., "To create an engaging learning tool for K-12 students.", "To provide a marketplace for local artisans.", "To streamline project tracking for our remote team."]</em></li>
+                        <li>Who are the primary users? <em>[Describe your target audience and their key needs/expectations. e.g., "Teachers and students (K-12)", "Craft enthusiasts and small business owners", "Project managers and team members."]</em></li>
+                    </ul>
+                </li>
+                <li><strong>Platforms (List ALL planned platforms upfront):</strong>
+                    <ul>
+                        <li>Mobile App(s): <em>[Yes/No. If Yes, specify: iOS, Android, Cross-platform (e.g., React Native, Flutter). Describe its main purpose, e.g., "Mobile app for participants to take quizzes."]</em></li>
+                        <li>Responsive Website: <em>[Yes/No. If Yes, specify its main purpose, e.g., "For marketing, user registration, and information.", "Web application for users to access all features."]</em></li>
+                        <li>CMS (Content Management System): <em>[Yes/No. If Yes, specify its main purpose, e.g., "For managing quiz content, blog posts, and users."]</em></li>
+                        <li>Other (e.g., Admin Panel, API): <em>[Specify if any other distinct components are needed]</em></li>
+                    </ul>
+                </li>
+                <li><strong>User Roles (Define ALL anticipated roles across ALL platforms):</strong>
+                    <ul>
+                        <li>Role 1: <em>[e.g., Admin]</em>
+                            <ul>
+                                <li>Platform(s) Access: <em>[e.g., CMS, Website Admin Panel, Mobile App (for testing)]</em></li>
+                                <li>Key Permissions: <em>[e.g., Full access to all content, user management, analytics, system settings]</em></li>
+                            </ul>
+                        </li>
+                        <li>Role 2: <em>[e.g., Content Editor]</em>
+                            <ul>
+                                <li>Platform(s) Access: <em>[e.g., CMS]</em></li>
+                                <li>Key Permissions: <em>[e.g., Create, edit, publish quizzes and blog posts; manage media library]</em></li>
+                            </ul>
+                        </li>
+                        <li>Role 3: <em>[e.g., Participant/Registered User]</em>
+                            <ul>
+                                <li>Platform(s) Access: <em>[e.g., Mobile App, Website (for account management)]</em></li>
+                                <li>Key Permissions: <em>[e.g., Register, login, take quizzes, view results, edit profile]</em></li>
+                            </ul>
+                        </li>
+                        <li><em>(Add more roles as needed)</em></li>
+                    </ul>
+                </li>
+                <li><strong>Core Features (List essential and optional features for the ENTIRE project):</strong>
+                    <ul>
+                        <li><strong>MUST-HAVE Core Features:</strong>
+                            <ol>
+                                <li>[e.g., Real-time quiz participation]</li>
+                                <li>[e.g., User authentication (signup, login, password reset)]</li>
+                                <li>[e.g., Quiz result analytics for admins]</li>
+                                <li>[e.g., Blog and content management in CMS]</li>
+                                <li>[Add more as needed]</li>
+                            </ol>
+                        </li>
+                        <li><strong>NICE-TO-HAVE Features (Optional, for future consideration):</strong>
+                            <ol>
+                                <li>[e.g., Dark mode for app and website]</li>
+                                <li>[e.g., Gamification elements (badges, leaderboards)]</li>
+                                <li>[e.g., Offline functionality for mobile app]</li>
+                                <li>[Add more as needed]</li>
+                            </ol>
+                        </li>
+                    </ul>
+                </li>
+                <li><strong>Design Preferences &amp; Inspirations (Overall aesthetic):</strong>
+                    <ul>
+                        <li>Describe desired look and feel: <em>[e.g., "Playful, engaging, and colorful", "Modern, minimal, and professional", "Dark theme, frosted glass cards, gradient buttons"]</em></li>
+                        <li>(DO: Be specific. DON'T: "Make it look nice.")</li>
+                        <li>Reference examples (websites, apps): <em>[Provide links or names, e.g., "Aesthetic similar to Kahoot", "Functionality inspired by Quizlet", "Dashboard style like Stripe's"]</em></li>
+                        <li>Key visual elements: <em>[e.g., "High contrast for accessibility", "Use of specific brand colors (provide hex codes if available)"]</em></li>
+                        <li>Share wireframes/screenshots if available: <em>[Mention if you will provide these separately]</em></li>
+                    </ul>
+                </li>
+                <li><strong>Scale Requirements (Anticipated usage for the entire project):</strong>
+                    <ul>
+                        <li>Number of Monthly Users: <em>[e.g., "Support 100,000 monthly active users"]</em></li>
+                        <li>Concurrent Sessions/Users: <em>[e.g., "Handle 1,000 concurrent quiz sessions"]</em></li>
+                        <li>Data Storage: <em>[e.g., "Store up to 10,000 media files (images, videos)", "Database size expected to grow to X GB"]</em></li>
+                    </ul>
+                </li>
+                <li><strong>Compliance &amp; Standards (If applicable):</strong>
+                    <ul>
+                        <li>[e.g., GDPR, HIPAA, WCAG 2.1 AA for accessibility, specific industry standards]</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+    </section>
+    
+    <section class="nclc-neumorph-section">
+        <h2 style="color: #f9f9f9ad;">SECTION 1: <p> PHASE 1 - </p> CORE APP <p> PLATFORM </p> DEVELOPMENT</h2>
+        <div class="nclc-card">
+            <ol>
+                <li><strong>Focus of this Phase:</strong> <em>[e.g., "Build the basic functionality of the mobile app for participants, including authentication and quiz participation."]</em></li>
+                <li><strong>Platform(s) for this Phase:</strong> <em>[e.g., "Mobile app (iOS and Android)"]</em></li>
+                <li><strong>Features for this Phase (from Section 0.5, MUST-HAVES):</strong>
+                    <ul>
+                        <li>Feature 1: <em>[e.g., User Authentication]</em>
+                            <ul>
+                                <li>Details: <em>[e.g., "Participants can sign up with email/password, log in, and log out. Include forgot password functionality."]</em></li>
+                            </ul>
+                        </li>
+                        <li>Feature 2: <em>[e.g., Real-time Quiz Participation]</em>
+                            <ul>
+                                <li>Details: <em>[e.g., "Participants can join a quiz using a code, see questions in real-time, submit answers, and receive immediate feedback for each question."]</em></li>
+                            </ul>
+                        </li>
+                        <li>Feature 3: <em>[e.g., Basic Quiz Result Display]</em>
+                            <ul>
+                                <li>Details: <em>[e.g., "After quiz completion, participants see their total score and time taken."]</em></li>
+                            </ul>
+                        </li>
+                        <li><em>(Add more features for this phase)</em></li>
+                    </ul>
+                </li>
+                <li><strong>Essential Data Structures for this Phase:</strong>
+                    <ul>
+                        <li><em>[e.g., "Users (ID, name, email, hashed_password)", "Quizzes (ID, title, access_code)", "Questions (ID, quiz_ID, text, options, correct_option_index)", "Answers (ID, user_ID, question_ID, selected_option_index, is_correct, timestamp)"]</em></li>
+                    </ul>
+                </li>
+                <li><strong>User Roles Involved in this Phase (from Section 0.4):</strong>
+                    <ul>
+                        <li><em>[e.g., "Participants (app-only access)"]</em></li>
+                    </ul>
+                </li>
+                <li><strong>Design Specifics for this Phase:</strong>
+                    <ul>
+                        <li><em>[e.g., "Focus on intuitive navigation for quiz taking. Use the 'Playful, engaging' aesthetic."]</em></li>
+                    </ul>
+                </li>
+                <li><strong>Performance Requirements for this Phase:</strong>
+                    <ul>
+                        <li><em>[e.g., "Quiz questions should load within 1 second.", "Answer submission feedback within 500ms."]</em></li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+    </section>
+    
+    <section class="nclc-neumorph-section">
+        <h2 style="color: #f9f9f9ad;">SECTION 2: <p> PHASE 2 - </p> WEB DEV</h2>
+        <div class="nclc-card">
+            <ol>
+                <li><strong>Focus of this Phase:</strong> <em>[e.g., "Develop a responsive website for marketing, user registration, and providing information about the app."]</em></li>
+                <li><strong>Platform(s) for this Phase:</strong> <em>[e.g., "Responsive Website"]</em></li>
+                <li><strong>Features for this Phase:</strong>
+                    <ul>
+                        <li>Feature 1: <em>[e.g., Landing Page]</em>
+                            <ul>
+                                <li>Content &amp; Functionality: <em>[e.g., "App overview, key features, testimonials, clear Call-To-Action (CTA) to download the app/register."]</em></li>
+                            </ul>
+                        </li>
+                        <li>Feature 2: <em>[e.g., User Registration &amp; Login]</em>
+                            <ul>
+                                <li>Content &amp; Functionality: <em>[e.g., "Allow users to register and log in via the website, syncing with the mobile app accounts."]</em></li>
+                            </ul>
+                        </li>
+                        <li>Feature 3: <em>[e.g., Blog Functionality (Basic)]</em>
+                            <ul>
+                                <li>Content &amp; Functionality: <em>[e.g., "Display blog posts. Initially, posts can be managed manually or via a simple backend if CMS is not yet ready."]</em></li>
+                            </ul>
+                        </li>
+                        <li><em>(Add more features for this phase)</em></li>
+                    </ul>
+                </li>
+                <li><strong>User Roles Involved in this Phase (from Section 0.4):</strong>
+                    <ul>
+                        <li><em>[e.g., "Prospective Users/Visitors", "Registered Users (for login/account access)"]</em></li>
+                    </ul>
+                </li>
+                <li><strong>Design Preferences for this Phase:</strong>
+                    <ul>
+                        <li><em>[e.g., "Modern, clean layout. High contrast for accessibility. Ensure it reflects the app's branding."]</em></li>
+                    </ul>
+                </li>
+                <li><strong>Content Requirements:</strong>
+                    <ul>
+                        <li><em>[e.g., "Text for landing page sections (Hero, Features, About Us), initial blog post topics, FAQ content."]</em></li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+    </section>
+    
+    <section class="nclc-neumorph-section">
+        <h2 style="color: #f9f9f9ad;">SECTION 3: <p> PHASE 3 - </p> CMS</h2>
+        <div class="nclc-card">
+            <ol>
+                <li><strong>Focus of this Phase:</strong> <em>[e.g., "Implement a CMS for managing quiz content, blog posts, user roles, and media."]</em></li>
+                <li><strong>Platform(s) for this Phase:</strong> <em>[e.g., "CMS"]</em></li>
+                <li><strong>CMS Features:</strong>
+                    <ul>
+                        <li>Feature 1: <em>[e.g., Quiz Management]</em>
+                            <ul>
+                                <li>Functionality: <em>[e.g., "Admins/Content Editors can create, edit, delete quizzes, add/modify questions, define correct answers, and categorize quizzes."]</em></li>
+                            </ul>
+                        </li>
+                        <li>Feature 2: <em>[e.g., Blog Post Management]</em>
+                            <ul>
+                                <li>Functionality: <em>[e.g., "Admins/Content Editors can create, edit, publish blog posts with a WYSIWYG editor, manage categories, and tags."]</em></li>
+                            </ul>
+                        </li>
+                        <li>Feature 3: <em>[e.g., User Role Management]</em>
+                            <ul>
+                                <li>Functionality: <em>[e.g., "Admins can manage user accounts and assign roles (e.g., content editor)."]</em></li>
+                            </ul>
+                        </li>
+                        <li>Feature 4: <em>[e.g., Media Library]</em>
+                            <ul>
+                                <li>Functionality: <em>[e.g., "Upload, search, tag, and manage images/videos for quizzes and blog posts."]</em></li>
+                            </ul>
+                        </li>
+                        <li>Feature 5: <em>[e.g., Basic Analytics Dashboard]</em>
+                            <ul>
+                                <li>Functionality: <em>[e.g., "Display key metrics like number of quizzes, active users, quiz completion rates."]</em></li>
+                            </ul>
+                        </li>
+                        <li><em>(Add more features for this phase)</em></li>
+                    </ul>
+                </li>
+                <li><strong>User Roles for CMS:</strong>
+                    <ul>
+                        <li><em>[e.g., "Admin (full access)", "Content Editors (quiz and blog management access)"]</em></li>
+                    </ul>
+                </li>
+                <li><strong>Functional Requirements for CMS:</strong>
+                    <ul>
+                        <li><em>[e.g., "Role-based access control for all CMS sections. Intuitive GUI for content creation."]</em></li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+    </section>
+    
+    <section class="nclc-neumorph-section">
+        <h2 style="color: #f9f9f9ad;">SECTION 4: <p> PHASE 4 - </p> FEATURES &amp; <p> INTEGRATIONS</p></h2>
+        <div class="nclc-card">
+            <ol>
+                <li><strong>Focus of this Phase:</strong> <em>[e.g., "Add advanced features like real-time leaderboards, gamification, and detailed analytics."]</em></li>
+                <li><strong>Platform(s) Affected:</strong> <em>[e.g., "Mobile App", "Website", "CMS"]</em></li>
+                <li><strong>Advanced Features:</strong>
+                    <ul>
+                        <li>Feature 1: <em>[e.g., Real-time Quiz Leaderboard]</em>
+                            <ul>
+                                <li>Platform: <em>[e.g., Mobile App]</em></li>
+                                <li>Details: <em>[e.g., "Display top scores for ongoing quizzes, update in real-time (e.g., every 500ms). Show user's rank."]</em></li>
+                            </ul>
+                        </li>
+                        <li>Feature 2: <em>[e.g., Gamification Badges]</em>
+                            <ul>
+                                <li>Platform: <em>[e.g., Mobile App, Website Profile]</em></li>
+                                <li>Details: <em>[e.g., "Award badges for achievements like 'Completed 10 quizzes', 'Top score in a quiz'. Badges visible on user profiles."]</em></li>
+                            </ul>
+                        </li>
+                        <li>Feature 3: <em>[e.g., Detailed Quiz Result Analytics in CMS]</em>
+                            <ul>
+                                <li>Platform: <em>[e.g., CMS]</em></li>
+                                <li>Details: <em>[e.g., "For Admins: View detailed analytics per quiz – question-wise performance, average scores, time taken. Allow exporting results as CSV."]</em></li>
+                            </ul>
+                        </li>
+                        <li><em>(Add more features)</em></li>
+                    </ul>
+                </li>
+                <li><strong>Performance Goals for Advanced Features:</strong>
+                    <ul>
+                        <li><em>[e.g., "Leaderboard updates within 500ms.", "Analytics dashboard load time under 3 seconds."]</em></li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+    </section>
+    
+    <section class="nclc-neumorph-section">
+        <h2 style="color: #f9f9f9ad;">SECTION 5: <p> PHASE 5 - </p> TESTING, <p> REFINEMENT </p> <p> &amp; DEBUGGING </p></h2>
+        <div class="nclc-card">
+            <ol>
+                <li><strong>Area of Focus:</strong> <em>[e.g., "End-to-end user flow for quiz participation", "Mobile responsiveness of the entire website", "Data integrity between app, website, and CMS."]</em></li>
+                <li><strong>Critical User Flows to Test:</strong>
+                    <ol>
+                        <li>[e.g., "User registration (app &amp; web) -&gt; Quiz selection -&gt; Real-time participation -&gt; Score display -&gt; Leaderboard update."]</li>
+                        <li>[e.g., "Admin login to CMS -&gt; Create new quiz -&gt; Publish quiz -&gt; Participant takes new quiz on app."]</li>
+                        <li>(List other key flows)</li>
+                    </ol>
+                </li>
+                <li><strong>Testing Requirements &amp; Scenarios:</strong>
+                    <ul>
+                        <li>[e.g., "Test on major browsers (Chrome, Firefox, Safari, Edge)."]</li>
+                        <li>[e.g., "Test on specific mobile devices (iOS/Android models)."]</li>
+                        <li>[e.g., "Validate all input fields and error handling."]</li>
+                        <li>[e.g., "Test for accessibility (WCAG compliance)."]</li>
+                        <li>[e.g., "Check real-time updates under varying network conditions."]</li>
+                    </ul>
+                </li>
+                <li><strong>Known Bugs or Areas for Improvement:</strong>
+                    <ul>
+                        <li>Bug 1: <em>[Describe specific bug. If providing code: "This login form worked before [insert working code snippet if brief]. Now it shows [insert error or incorrect behavior]. How do I fix it?"]</em></li>
+                        <li>Improvement 1: <em>[e.g., "Increase card spacing on the mobile app's dashboard to 2rem for better visual separation."]</em></li>
+                    </ul>
+                </li>
+                <li><strong>Specific Debugging Request:</strong>
+                    <ul>
+                        <li>What were you trying to do? <em>[e.g., "Get the real-time leaderboard to update correctly."]</em></li>
+                        <li>What was the expected behavior? <em>[e.g., "Leaderboard should refresh every 500ms with new scores."]</em></li>
+                        <li>What is the actual behavior/error? <em>[e.g., "Leaderboard only updates on manual refresh, or console shows 'WebSocket connection error'."]</em></li>
+                        <li>Relevant code (if concise): <em>[Paste snippet if helpful]</em></li>
+                        <li>Question: <em>[e.g., "What could be causing the WebSocket issue, and how can I ensure consistent real-time updates?"]</em></li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+    </section>
+    
+    <section class="nclc-neumorph-section slide-section">
+  ...
+</section>
+    
+    <section class="nclc-neumorph-section">
+        <h2 style="color: #f9f9f9ad;"> <p> REMEMBER </p> TO HAVE FUN</h2>
+        <div class="parallax-text">
+          <p>
+            This write up provides my methods and a step by step guide on what that looks like. Everyone has their own process, some developed through learning what works and what doesnt and others just wing it. <strong>THATS OK TOO!</strong> (<a href="https://bolt.new">bolt.new</a>) is just one of many great NLP AI IDE out there and each have their own drawbacks and positives to them. I  wish everyone the best of luck in the hackathon. Thank you to ALL of the sponsors for making this possible, I see you.
+          </p>
+          </p>
+        </div>
+    </section>
+    
+    <section class="nclc-neumorph-section">
+        <h2 style="color: #f9f9f9ad;"> <p> Final Tips </p> for Your Prompts</h2>
+        <div class="parallax-text">
+          <ul>
+            <li><strong>Iterate:</strong> Send prompts for one phase (or even a part of a phase) at a time. Review Bolt's output, then refine or move to the next part</li>
+            <li><strong>Be Specific:</strong> The more detailed your visual, functional, and performance requirements, the better</li>
+            <li><strong>Reference:</strong> Don't hesitate to refer to previous parts of your conversation with Bolt or elements it has already built</li>
+            <li><strong>Utilize Bolt's Tools:</strong> Remember <code>.bolt/prompt</code> for custom instructions and <code>.bolt/ignore</code> for optimizing token usage</li>
+          </ul>
+        </div>
+    </section>
+    
+    <section class="nclc-neumorph-section">
+        <h2 style="color: #f9f9f9ad;"> </p> Prompting </p> Techniques</h2>
+        <div class="parallax-text">
+          <ul style="columns: 2;">
+            <li>Zero-Shot Prompting</li>
+            <li>Few-Shot Prompting</li>
+            <li>Chain-of-Thought Prompting</li>
+            <li>Meta Prompting</li>
+            <li>Self-Consistency Decoding</li>
+            <li>Generate Knowledge Prompting</li>
+            <li>Prompt Chaining</li>
+            <li>Tree of Thoughts</li>
+            <li>Retrieval Augmented Generation</li>
+            <li>Directional Stimulus Prompting</li>
+            <li>Graph Prompting</li>
+            <li>ReAct Prompting</li>
+          </ul>
+        </div>
+    </section>
+    
+    <section class="nclc-neumorph-section">
+        <h2 style="color: #f9f9f9ad;">Final Notes</h2>
+        <div class="parallax-text">
+          <p>
+            One more time, Thank you for taking the time to read this guide. Remember, you drive the conversation, and this is your project.
+          </p>
+          <p>
+            If you allow the AI to fill in the areas that you're not specific about, you will more than likely have issues later on down the road.
+          </p>
+          <p>
+            We may not be coding or giving it the easy 1-sentence prompt, but the result will be of much better quality this way.
+          </p>
+          <p style="font-weight: bold; color: #ff0000ad; text-align: center; font-size: 2.2rem;">.KEEP.IT.SECTIONED.</p>
+        </div>
+    </section>
+    
+  </div>
+</div>
+<script>
+console.clear();
+
+const select = e => document.querySelector(e);
+const selectAll = e => document.querySelectorAll(e);
+
+const stage = select('.stage');
+const square = select('.square');
+const squareFrame = select('.square-frame');
+const global = gsap.timeline({ delay: 0.1 });
+const loopTime = 16;
+const ballDuration = loopTime/8;
+const introRotTime = 0.5;
+const introRotDelay = 0.5;
+const squareDelay = introRotTime+introRotDelay;
+const bandST = new SplitText('.band', {type:"chars", charsClass:"bandChar", position: "absolute" }); 
+
+CustomBounce.create("ballBounce", { strength: 0.5 });
+
+const constEase = CustomEase.create("custom", 
+  `M0,0,
+    C0.1,0.025,
+    0.125,0.225,
+    0.25,0.25,
+    0.375,0.275,
+    0.375,0.475,
+    0.5,0.5,
+    0.625,0.525,
+    0.625,0.725,
+    0.75,0.75,
+    0.875,0.775,
+    0.875,0.975
+    ,1,1`);
+
+function introAnimation() {
+    let tl = gsap.timeline();
+    
+    tl.from('.square__large', {
+        scaleX: 0,
+        duration: 2,
+        ease: 'power4.inOut',
+        transformOrigin: "right center"
+    }, 0)
+    .to('.square-frame', { 
+        rotation: 32,
+        duration: introRotTime,
+        ease: CustomEase.create("custom", "M0,0,C0.234,0.528,0.524,0.828,1,1")
+    }, introRotDelay)
+    .from('.square__small', {
+        scaleX: 0,
+        duration: 1,
+        ease: 'power4',
+        transformOrigin: "right center"
+    }, 1.1)
+    .set(['.ball', '.dark-patch'], { visibility: 'visible' }, 1.3)
+    .fromTo('.ball', {
+        x: -206,
+    }, {
+        x: 58,
+        ease: 'ballBounce',
+        duration: 5
+    }, 1.3)
+    
+    return tl;
+}
+
+function loopSquare() {
+    let tl = gsap.timeline( {
+        repeat: -1
+    });
+    tl.to(square, { 
+        duration: loopTime, 
+        ease: constEase, 
+        rotation: "+=360",
+        transformOrigin: "center center"
+    })
+    return tl
+}
+
+function loopBall() {
+    let tl = gsap.timeline({
+        repeat: -1,
+        repeatDelay: ballDuration,
+        defaults: {
+           ease: 'ballBounce',
+            duration: ballDuration 
+        }
+    });
+    
+    tl.to('.ball', {
+        y: -58
+    })
+    .to('.ball', {
+        x: 0
+    }, loopTime/4)
+    .to('.ball', {
+        y: 0
+    }, loopTime/2)
+    .to('.ball', {
+        x: 58
+    }, loopTime*0.75)
+    
+    return tl;
+}
+
+function animInContent() {
+    let tl = gsap.timeline({
+        defaults: {
+            ease: 'power2',
+            duration: 2
+        }
+    });
+    
+    tl.from('.bandChar', {
+        y: -120,
+        stagger: 0.05
+    })
+    .from('span', {
+        alpha: 0,
+        y: 40,
+        stagger: 0.1,
+    }, 0.8);
+    
+    return tl;
+}
+
+function animate() {
+    gsap.set(stage, { 
+        autoAlpha: 1
+    });
+    gsap.set('.square-frame', { 
+        transformOrigin: "center center",
+        x: -141,
+        y: -217
+    });
+    
+    global.add(introAnimation())
+        .add(animInContent(), 1.5)
+        .add(loopSquare(), squareDelay)
+        .add(loopBall(), 4.8);
+}
+
+function resize() {
+    let vh = window.innerHeight;
+    let sh = stage.offsetHeight;
+    let scaleFactor = Math.min(vh / sh, 1); // Ensure scaleFactor does not exceed 1
+    gsap.set(stage, { scale: scaleFactor, maxWidth: 'none' }); // Remove max-width constraint
+}
+
+function init() {
+    resize();
+    animate();
+    stage.onclick = () => {
+        global.restart();
+    }
+}
+
+window.onload = () => {
+    init();
+};
+
+// Animate sections sliding in from left/right as you scroll
+gsap.utils.toArray('.slide-section').forEach((section, i) => {
+  gsap.fromTo(section, 
+    {
+      x: i % 2 === 0 ? '-80vw' : '80vw',
+      opacity: 0
+    },
+    {
+      x: 0,
+      opacity: 1,
+      duration: 1.1,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: section,
+        start: "top 80%",
+        end: "bottom 20%",
+        toggleActions: "play reverse play reverse",
+        scrub: false
+      }
+    }
+  );
+});
+
+// Animate h2 titles with a React-style "pop" as they enter viewport
+gsap.utils.toArray('.nclc-neumorph-section > h2').forEach((title) => {
+  const split = new SplitText(title, { type: "chars", charsClass: "neumorph-title-char" });
+  gsap.from(split.chars, {
+    y: 60,
+    opacity: 0,
+    stagger: 0.04,
+    duration: 0.7,
+    ease: "back.out(1.7)",
+    scrollTrigger: {
+      trigger: title,
+      start: "top 85%",
+      toggleActions: "play none none none"
+    }
+  });
+});
+
+// Animate cards sliding in from alternating sides as you scroll
+gsap.utils.toArray('.nclc-card, .technique-card, .highlight-box').forEach((card, i) => {
+  gsap.fromTo(card, 
+    {
+      x: i % 2 === 0 ? '-60vw' : '60vw',
+      opacity: 0
+    },
+    {
+      x: 0,
+      opacity: 1,
+      duration: 1,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: card,
+        start: "top 85%",
+        end: "bottom 15%",
+        toggleActions: "play reverse play reverse",
+        scrub: false
+      }
+    }
+  );
+});
+</script>
+</body>
+</html>
